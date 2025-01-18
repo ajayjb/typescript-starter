@@ -238,24 +238,37 @@ class Base {
 }
 
 class Extended extends Base {
-  extendedField = super.baseMethod(); // 10
-  static extendedStaticField = super.; // 90
+  public x: string;
+
+  constructor() {
+    super();
+    this.x = "rr";
+  }
+
+  extendedField = super.baseMethod();
+  static extendedStaticField = super.baseStaticField;
 }
 class Vehicle {
   public brand: string;
   public name: string;
   public year: number;
+  public power: number;
 
-  constructor(brand: string, name: string, year: number) {
+  static description: string = "This is vehicle class";
+
+  constructor(brand: string, name: string, year: number, power: number) {
     this.brand = brand;
     this.name = name;
     this.year = year;
+    this.power = power;
 
     this.init();
   }
 
-  private init(): void {
-    console.log(`${this.brand}-${this.name}-${this.year}`);
+  public init() {}
+
+  public getName(): string {
+    return `${this.brand}-${this.name}-${this.year}`;
   }
 
   public drive(): void {
@@ -263,26 +276,40 @@ class Vehicle {
   }
 
   public horn(): void {
-    console.log("Chugga Chugga");
+    console.log("Honk Honk");
   }
 
-  static f(){}
+  static getClassName(): string {
+    return "Vehicle";
+  }
 }
 class Car extends Vehicle {
+  static superClassDescription = super.description;
+  static description = "This is car class";
 
-  static x = super.f()
+  public type: string;
 
-  constructor(brand: string, name: string, year: number) {
-    super(brand, name, year);
+  constructor(
+    brand: string,
+    name: string,
+    year: number,
+    power: number,
+    type: string
+  ) {
+    super(brand, name, year, power);
+    this.type = type;
   }
 
-
-  private getBrand = (): string => {
-    return this.brand;
+  public getName = (): string => {
+    return `${this.brand}-${this.name}-${this.year} ${this.type} Car`;
   };
 
   public drive(): void {
     console.log("Vroom Vroom");
+  }
+
+  static getClassName(): string {
+    return "Car";
   }
 
   // anonymous function dont use inside class //
@@ -302,13 +329,10 @@ class Car extends Vehicle {
   //   return this.brand;
   // }.bind(this);
   // anonymous function dont use inside class //
-
-  static getClassName(): string {
-    return "Car";
-  }
 }
 
-const fronx: Car = new Car("Suzuki", "Fronx", 2023);
+const fronx: Car = new Car("Suzuki", "Fronx", 2023, 500, "SUV");
+console.log(fronx.getName());
 // Types with classes
 
 // TS Generics
