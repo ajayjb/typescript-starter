@@ -230,6 +230,22 @@ const tup2: [string, ...string[]] = ["loki", "thor"];
 // Tuples
 
 // Types with classes
+
+// These static, public, private, protected are called modifiers
+
+// public:
+// (Instance Level) If we don't mention any modifier then its public. It can be called in same class, child class and on instance of class.
+
+// private:
+// (Instance Level)  It can be called in same class, not in child class or on instance of class.
+
+// protected:
+// (Instance Level)  It can be called in same class and in child class not on instance of class.
+
+// static:
+// (Class level) It can called in the same class and child class. not on instance of class.
+// It can be called in static method only using this keyword. To use in other modifier we use the class name it self since it exists on the class.
+
 class Base {
   static baseStaticField = 90;
   baseMethod() {
@@ -238,11 +254,8 @@ class Base {
 }
 
 class Extended extends Base {
-  public x: string;
-
   constructor() {
     super();
-    this.x = "rr";
   }
 
   extendedField = super.baseMethod();
@@ -261,11 +274,7 @@ class Vehicle {
     this.name = name;
     this.year = year;
     this.power = power;
-
-    this.init();
   }
-
-  public init() {}
 
   public getName(): string {
     return `${this.brand}-${this.name}-${this.year}`;
@@ -275,8 +284,12 @@ class Vehicle {
     console.log("Chugga Chugga");
   }
 
-  public horn(): void {
+  private horn(): void {
     console.log("Honk Honk");
+  }
+
+  protected stop() {
+    console.log("Burr Burr");
   }
 
   static getClassName(): string {
@@ -298,11 +311,23 @@ class Car extends Vehicle {
   ) {
     super(brand, name, year, power);
     this.type = type;
+
+   this.init();
+  }
+
+  private init() {
+    console.log(Car.description);
   }
 
   public getName = (): string => {
     return `${this.brand}-${this.name}-${this.year} ${this.type} Car`;
   };
+
+  // In child class if we are over writing a method we can't change the modifier, this throws error.
+  // If a method is public in super class, then it has to be public in child class, if we are over writing
+  // private drive(): void {
+  //   console.log("Vroom Vroom");
+  // }
 
   public drive(): void {
     console.log("Vroom Vroom");
@@ -331,8 +356,7 @@ class Car extends Vehicle {
   // anonymous function dont use inside class //
 }
 
-const fronx: Car = new Car("Suzuki", "Fronx", 2023, 500, "SUV");
-console.log(fronx.getName());
+// const fronx: Car = new Car("Suzuki", "Fronx", 2023, 500, "SUV");
 // Types with classes
 
 // TS Generics
