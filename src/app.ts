@@ -230,186 +230,275 @@ const tup2: [string, ...string[]] = ["loki", "thor"];
 // Tuples
 
 // Types with classes
+{
+  // These static, public, private, protected are called modifiers
 
-// These static, public, private, protected are called modifiers
+  // public:
+  // (Instance Level) If we don't mention any modifier then its public. It can be called in same class, child class and on instance of class.
 
-// public:
-// (Instance Level) If we don't mention any modifier then its public. It can be called in same class, child class and on instance of class.
+  // private:
+  // (Instance Level)  It can be called in same class, not in child class or on instance of class.
 
-// private:
-// (Instance Level)  It can be called in same class, not in child class or on instance of class.
+  // protected:
+  // (Instance Level)  It can be called in same class and in child class not on instance of class.
 
-// protected:
-// (Instance Level)  It can be called in same class and in child class not on instance of class.
+  // static:
+  // (Class level) It can called in the same class and child class. not on instance of class.
+  // It can be called in static method only using this keyword. To use in other modifier we use the class name it self since it exists on the class.
 
-// static:
-// (Class level) It can called in the same class and child class. not on instance of class.
-// It can be called in static method only using this keyword. To use in other modifier we use the class name it self since it exists on the class.
-
-class Base {
-  static baseStaticField = 90;
-  baseMethod() {
-    return 10;
+  class Base {
+    static baseStaticField = 90;
+    baseMethod() {
+      return 10;
+    }
   }
+
+  class Extended extends Base {
+    constructor() {
+      super();
+    }
+
+    extendedField = super.baseMethod();
+    static extendedStaticField = super.baseStaticField;
+  }
+  class Vehicle {
+    public brand: string;
+    public name: string;
+    public year: number;
+    public power: number;
+
+    static description: string = "This is vehicle class";
+
+    constructor(brand: string, name: string, year: number, power: number) {
+      this.brand = brand;
+      this.name = name;
+      this.year = year;
+      this.power = power;
+    }
+
+    public getName(): string {
+      return `${this.brand}-${this.name}-${this.year}`;
+    }
+
+    public drive(): void {
+      console.log("Chugga Chugga");
+    }
+
+    private horn(): void {
+      console.log("Honk Honk");
+    }
+
+    protected stop() {
+      console.log("Burr Burr");
+    }
+
+    static getClassName(): string {
+      return "Vehicle";
+    }
+  }
+  class Car extends Vehicle {
+    static superClassDescription = super.description;
+    static description = "This is car class";
+
+    public type: string;
+
+    constructor(
+      brand: string,
+      name: string,
+      year: number,
+      power: number,
+      type: string
+    ) {
+      super(brand, name, year, power);
+      this.type = type;
+
+      this.init();
+    }
+
+    private init() {
+      console.log(Car.description);
+    }
+
+    public getName = (): string => {
+      return `${this.brand}-${this.name}-${this.year} ${this.type} Car`;
+    };
+
+    // In child class if we are over writing a method we can't change the modifier, this throws error.
+    // If a method is public in super class, then it has to be public in child class, if we are over writing
+    // private drive(): void {
+    //   console.log("Vroom Vroom");
+    // }
+
+    public drive(): void {
+      console.log("Vroom Vroom");
+    }
+
+    static getClassName(): string {
+      return "Car";
+    }
+
+    // anonymous function dont use inside class //
+    // private getBrand2 = function (): string {
+    //   return this.brand;
+    // };
+
+    // The this inside the anonymous function does not refer to the class
+    // instance unless you explicitly bind it. In a TypeScript class,
+    // this might be undefined (in strict mode) or point to an unexpected value
+    // depending on how the function is called.
+
+    // If you prefer to use a regular anonymous function,
+    // you need to explicitly bind it to the class instance.
+
+    // private getBrand2 = function (): string {
+    //   return this.brand;
+    // }.bind(this);
+    // anonymous function dont use inside class //
+  }
+
+  const fronx: Car = new Car("Suzuki", "Fronx", 2023, 500, "SUV");
+  let j = fronx;
 }
-
-class Extended extends Base {
-  constructor() {
-    super();
-  }
-
-  extendedField = super.baseMethod();
-  static extendedStaticField = super.baseStaticField;
-}
-class Vehicle {
-  public brand: string;
-  public name: string;
-  public year: number;
-  public power: number;
-
-  static description: string = "This is vehicle class";
-
-  constructor(brand: string, name: string, year: number, power: number) {
-    this.brand = brand;
-    this.name = name;
-    this.year = year;
-    this.power = power;
-  }
-
-  public getName(): string {
-    return `${this.brand}-${this.name}-${this.year}`;
-  }
-
-  public drive(): void {
-    console.log("Chugga Chugga");
-  }
-
-  private horn(): void {
-    console.log("Honk Honk");
-  }
-
-  protected stop() {
-    console.log("Burr Burr");
-  }
-
-  static getClassName(): string {
-    return "Vehicle";
-  }
-}
-class Car extends Vehicle {
-  static superClassDescription = super.description;
-  static description = "This is car class";
-
-  public type: string;
-
-  constructor(
-    brand: string,
-    name: string,
-    year: number,
-    power: number,
-    type: string
-  ) {
-    super(brand, name, year, power);
-    this.type = type;
-
-    this.init();
-  }
-
-  private init() {
-    console.log(Car.description);
-  }
-
-  public getName = (): string => {
-    return `${this.brand}-${this.name}-${this.year} ${this.type} Car`;
-  };
-
-  // In child class if we are over writing a method we can't change the modifier, this throws error.
-  // If a method is public in super class, then it has to be public in child class, if we are over writing
-  // private drive(): void {
-  //   console.log("Vroom Vroom");
-  // }
-
-  public drive(): void {
-    console.log("Vroom Vroom");
-  }
-
-  static getClassName(): string {
-    return "Car";
-  }
-
-  // anonymous function dont use inside class //
-  // private getBrand2 = function (): string {
-  //   return this.brand;
-  // };
-
-  // The this inside the anonymous function does not refer to the class
-  // instance unless you explicitly bind it. In a TypeScript class,
-  // this might be undefined (in strict mode) or point to an unexpected value
-  // depending on how the function is called.
-
-  // If you prefer to use a regular anonymous function,
-  // you need to explicitly bind it to the class instance.
-
-  // private getBrand2 = function (): string {
-  //   return this.brand;
-  // }.bind(this);
-  // anonymous function dont use inside class //
-}
-
-// const fronx: Car = new Car("Suzuki", "Fronx", 2023, 500, "SUV");
 // Types with classes
 
 // TS Generics
-function convertToArray<T>(value: T): T[] {
-  return [value];
+{
+  function convertToArray<T>(value: T): T[] {
+    return [value];
+  }
+
+  const convertToArrayArrowFunc = <T>(value: T): T[] => {
+    return [value];
+  };
+
+  function getFirst<T>(a: T[]): T {
+    return a[0];
+  }
+
+  const getFirst1 = <T>(a: T[]): T => {
+    return a[0];
+  };
+
+  const nums = [1, 2, 3, 4];
+  getFirst<number>(nums); // or getFirst(nums);
+
+  const strs = ["1", "2", "3", "4"];
+  getFirst<string>(strs); // or getFirst(strs);
+
+  const some = new Map<string, number>([["k", 1]]);
+  const map = new Map<string, Map<string, number>>([["w", some]]);
+
+  type ApiRes<k = { ifIDontPassAnyThing: number }> = {
+    data: k;
+    isError: boolean;
+  };
+
+  interface ApiRes2<k> {
+    data: k;
+    isError: boolean;
+  }
+
+  const blogs: ApiRes2<{ title: string }> = {
+    data: { title: "My Fate" },
+    isError: false,
+  };
+
+  type UserRes = ApiRes<{ name: string }>;
+  type BlogRes = ApiRes<{ title: string }>;
+
+  const user: UserRes = {
+    data: { name: "loki" },
+    isError: false,
+  };
+
+  const blog: BlogRes = {
+    data: { title: "loki" },
+    isError: false,
+  };
+
+  // Default
+  const ifIDontPassAnyThing: ApiRes = {
+    data: { ifIDontPassAnyThing: 1 },
+    isError: false,
+  };
+
+  const s: object = [1, 2];
+
+  class Vehicle<T> {
+    public newVehicle: Vehicle<T> | null;
+    constructor(public data: T) {
+      this.data = data;
+      this.newVehicle = null;
+    }
+
+    anotherVehicle<K extends Vehicle<T>>(response: K) {
+      this.newVehicle = response;
+    }
+
+    someTest(val: Vehicle<T>){
+
+    }
+  }
+
+  const car = new Vehicle({
+    name: "Suzuki",
+    model: "Fronx",
+  });
+
+  const car2: Vehicle<{ name: string; model: string; year: number }> =
+    new Vehicle<{
+      name: string;
+      model: string;
+      year: number;
+    }>({
+      name: "Suzuki",
+      model: "Fronx",
+      year: 2019,
+    });
+
+  const car3 = new Vehicle<{
+    name: string;
+    model: string;
+    year: number;
+  }>({
+    name: "Suzuki",
+    model: "Fronx",
+    year: 2019,
+  });
+
+  car2.anotherVehicle(car3);
+
+  // Just like class above
+  new Array<number>(5);
+  const arr1: Array<number> = [1, 2, 4];
+  // Just like class above
+
+  class Person<K> {
+    constructor(public name: string, public height: string, public some: K) {
+      this.name = name;
+      this.height = height;
+      this.some = some;
+    }
+
+    someSuperFunc<T extends Person<K>>(data: T) {}
+  }
+
+  class Women<T, J> extends Person<J> {
+    constructor(
+      name: string,
+      height: string,
+      public otherData: T,
+      some: J
+    ) {
+      super(name, height, some);
+      this.otherData = otherData;
+    }
+
+    someChildFunc() {
+      super.someSuperFunc<Women<T, J>>(this);
+    }
+  }
 }
-
-const convertToArrayArrowFunc = <T>(value: T): T[] => {
-  return [value];
-};
-
-function getFirst<T>(a: T[]): T {
-  return a[0];
-}
-
-const getFirst1 = <T>(a: T[]): T => {
-  return a[0];
-};
-
-const nums = [1, 2, 3, 4];
-getFirst<number>(nums); // or getFirst(nums);
-
-const strs = ["1", "2", "3", "4"];
-getFirst<string>(strs); // or getFirst(strs);
-
-const some = new Map<string, number>([["k", 1]]);
-const map = new Map<string, Map<string, number>>([["w", some]]);
-
-type ApiRes<k = { ifIDontPassAnyThing: number }> = {
-  data: k;
-  isError: boolean;
-};
-
-type UserRes = ApiRes<{ name: string }>;
-type BlogRes = ApiRes<{ title: string }>;
-
-const user: UserRes = {
-  data: { name: "loki" },
-  isError: false,
-};
-
-const blog: BlogRes = {
-  data: { title: "loki" },
-  isError: false,
-};
-
-// Default
-const ifIDontPassAnyThing: ApiRes = {
-  data: { ifIDontPassAnyThing: 1 },
-  isError: false,
-};
-
-const s: object = [1, 2];
 
 // TS Generics
 
