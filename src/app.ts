@@ -115,7 +115,7 @@ interface BooksResponse {
 
 const getBooks = async () => {
   const res = await axios.get("https://fakerapi.it/api/v2/books?_quantity=1");
-  const data: BooksResponse = res.data as BooksResponse;
+  const data: BooksResponse = <BooksResponse>res.data; // res.data as BooksResponse
   const books = data.data;
   console.log(books);
 };
@@ -312,7 +312,7 @@ class Car extends Vehicle {
     super(brand, name, year, power);
     this.type = type;
 
-   this.init();
+    this.init();
   }
 
   private init() {
@@ -360,11 +360,81 @@ class Car extends Vehicle {
 // Types with classes
 
 // TS Generics
-function convertToArray<Type>(value: Type): Type[] {
+function convertToArray<T>(value: T): T[] {
   return [value];
 }
 
 const convertToArrayArrowFunc = <T>(value: T): T[] => {
   return [value];
 };
+
+function getFirst<T>(a: T[]): T {
+  return a[0];
+}
+
+const getFirst1 = <T>(a: T[]): T => {
+  return a[0];
+};
+
+const nums = [1, 2, 3, 4];
+getFirst<number>(nums); // or getFirst(nums);
+
+const strs = ["1", "2", "3", "4"];
+getFirst<string>(strs); // or getFirst(strs);
+
+const some = new Map<string, number>([["k", 1]]);
+const map = new Map<string, Map<string, number>>([["w", some]]);
+
+type ApiRes<k = { ifIDontPassAnyThing: number }> = {
+  data: k;
+  isError: boolean;
+};
+
+type UserRes = ApiRes<{ name: string }>;
+type BlogRes = ApiRes<{ title: string }>;
+
+const user: UserRes = {
+  data: { name: "loki" },
+  isError: false,
+};
+
+const blog: BlogRes = {
+  data: { title: "loki" },
+  isError: false,
+};
+
+// Default
+const ifIDontPassAnyThing: ApiRes = {
+  data: { ifIDontPassAnyThing: 1 },
+  isError: false,
+};
+
+const s: object = [1, 2];
+
 // TS Generics
+
+// type assertions
+
+// type assertions
+// Use type assertions when you need to override TypeScript's
+// inferred type for specific cases (but use with caution)
+
+//
+
+{
+  type User = {
+    name: string;
+  };
+
+  const some1: any = { x: 1 };
+
+  // Modern,
+  const some2 = some1 as User;
+  // console.log(some2.name); throws error at run time, not at compilation time
+  // its just tells assume some1 as string,
+  // it does not change value. if we assign wrong value we will get error at only run time not at compilation,
+  // because ts just compiles code to js assuming it as string
+
+  // Legacy
+  const some3 = <string>some1;
+}
