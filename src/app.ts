@@ -265,15 +265,17 @@ const tup2: [string, ...string[]] = ["loki", "thor"];
     public brand: string;
     public name: string;
     public year: number;
-    public power: number;
+    public power: number | undefined;
 
     static description: string = "This is vehicle class";
 
-    constructor(brand: string, name: string, year: number, power: number) {
+    constructor(brand: string, name: string, year: number, power?: number) {
       this.brand = brand;
       this.name = name;
       this.year = year;
-      this.power = power;
+      if (power) {
+        this.power = power;
+      }
     }
 
     public getName(): string {
@@ -357,6 +359,9 @@ const tup2: [string, ...string[]] = ["loki", "thor"];
   }
 
   const fronx: Car = new Car("Suzuki", "Fronx", 2023, 500, "SUV");
+
+  delete fronx.power;
+
   let j = fronx;
 }
 // Types with classes
@@ -435,9 +440,7 @@ const tup2: [string, ...string[]] = ["loki", "thor"];
       this.newVehicle = response;
     }
 
-    someTest(val: Vehicle<T>){
-
-    }
+    someTest(val: Vehicle<T>) {}
   }
 
   const car = new Vehicle({
@@ -484,12 +487,7 @@ const tup2: [string, ...string[]] = ["loki", "thor"];
   }
 
   class Women<T, J> extends Person<J> {
-    constructor(
-      name: string,
-      height: string,
-      public otherData: T,
-      some: J
-    ) {
+    constructor(name: string, height: string, public otherData: T, some: J) {
       super(name, height, some);
       this.otherData = otherData;
     }
